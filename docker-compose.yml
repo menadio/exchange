@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'php artisan serve --host=0.0.0.0'
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8800:8000
+
+  db:
+    image: mysql:8.0
+    volumes:
+      - datadir:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: abuexchange
+      MYSQL_USER: abuexchange
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+
+volumes:
+  datadir:
