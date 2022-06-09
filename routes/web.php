@@ -8,6 +8,7 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ExchangeRateController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,8 @@ Route::get('users/download', [UserController::class, 'export'])
 
 Route::get('transactions/download', [TransactionController::class, 'download'])
     ->name('transactions.download');
+
+Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
     
 Route::resource('users', UserController::class)
     ->middleware(['auth', 'verified']);

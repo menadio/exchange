@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\TradeRecorded;
 use App\Models\User;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Log;
 
 class Tradeservice
 {
@@ -52,7 +53,8 @@ class Tradeservice
             'note' => $details->note,
         ]);
 
-        // TradeRecorded::dispatch($transaction);
+        TradeRecorded::dispatch($transaction);
+        Log::notice('Transaction event dispatched, waiting for report update listener ....');
 
         return $transaction;
     }
