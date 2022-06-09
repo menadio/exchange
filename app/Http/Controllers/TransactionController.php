@@ -59,13 +59,7 @@ class TransactionController extends Controller
             'amount' => ['required', 'numeric', 'min:1']
         ]);
 
-        $transaction = $this->tradeService->recordTrade(
-            auth()->user(), 
-            $request->currency, 
-            $request->type, 
-            $request->amount, 
-            $request->channel
-        );
+        $transaction = $this->tradeService->recordTrade($request);
 
         if ($transaction) {
             request()->session()->flash('success', 'Trade transaction recorded successfully.');

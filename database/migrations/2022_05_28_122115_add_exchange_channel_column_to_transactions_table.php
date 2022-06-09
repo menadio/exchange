@@ -18,6 +18,8 @@ return new class extends Migration
                 ->nullable()    
                 ->constrained('channels')
                 ->after('channel_id');
+            $table->text('note')->nullable()
+                ->after('exchange_channel_id');
         });
     }
 
@@ -29,7 +31,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('transactions', function (Blueprint $table) {
+            $table->dropForeign(['exchange_channel_id']);
             $table->dropColumn('exchange_channel_id');
+            // $table->dropColumn('note');
         });
     }
 };

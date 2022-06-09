@@ -22786,6 +22786,7 @@ __webpack_require__.r(__webpack_exports__);
       amount: null,
       channel: null,
       exchangeChannel: null,
+      note: null,
       specialRate: null
     });
     var open = (0,vue__WEBPACK_IMPORTED_MODULE_3__.ref)(false);
@@ -25336,18 +25337,17 @@ var _hoisted_45 = ["value"];
 var _hoisted_46 = {
   "class": "mt-4 relative"
 };
-var _hoisted_47 = ["value"];
-var _hoisted_48 = {
+var _hoisted_47 = {
   "class": "mt-4"
 };
-var _hoisted_49 = {
+var _hoisted_48 = {
   "class": "mt-1"
 };
-var _hoisted_50 = {
+var _hoisted_49 = {
   "class": "mt-4"
 };
 
-var _hoisted_51 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Save");
+var _hoisted_50 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Save");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["BreezeAuthenticatedLayout"], null, {
@@ -25566,39 +25566,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       /* NEED_PATCH */
                       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.exchangeChannel]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppLabel"], {
                         value: "Note"
-                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
-                        id: "type",
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
                         "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
                           return $setup.form.note = $event;
                         }),
-                        "class": "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                      }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.channels, function (channel) {
-                        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
-                          key: channel.id,
-                          value: channel.id
-                        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(channel.name), 9
-                        /* TEXT, PROPS */
-                        , _hoisted_47);
-                      }), 128
-                      /* KEYED_FRAGMENT */
-                      ))], 512
+                        id: "note",
+                        name: "note",
+                        rows: "3",
+                        "class": "max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
+                      }, null, 512
                       /* NEED_PATCH */
-                      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.note]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppLabel"], {
+                      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.note]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <select\n                      id=\"type\"\n                      \n                      class=\"\n                        mt-1\n                        block\n                        w-full\n                        pl-3\n                        pr-10\n                        py-2\n                        text-base\n                        border-gray-300\n                        focus:outline-none\n                        focus:ring-indigo-500\n                        focus:border-indigo-500\n                        sm:text-sm\n                        rounded-md\n                      \"\n                    >\n                      <option\n                        v-for=\"channel in channels\"\n                        :key=\"channel.id\"\n                        :value=\"channel.id\"\n                      >\n                        {{ channel.name }}\n                      </option>\n                    </select> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppLabel"], {
                         value: "Special Rate"
-                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppInput"], {
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppInput"], {
                         modelValue: $setup.form.specialRate,
                         "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
                           return $setup.form.specialRate = $event;
                         }),
                         type: "number",
                         min: "1",
-                        required: "",
                         "class": "w-full"
                       }, null, 8
                       /* PROPS */
-                      , ["modelValue"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppButton"], null, {
+                      , ["modelValue"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["AppButton"], null, {
                         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                          return [_hoisted_51];
+                          return [_hoisted_50];
                         }),
                         _: 1
                         /* STABLE */

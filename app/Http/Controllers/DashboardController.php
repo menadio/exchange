@@ -7,6 +7,7 @@ use App\Models\Currency;
 use App\Models\ExchangeRate;
 use App\Models\TradeType;
 use App\Models\Transaction;
+use App\Services\ExchangeRateService;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -14,11 +15,11 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(ExchangeRateService $exchangeRateService)
     {
         $today = now()->toDateString();
 
-        $rates = ExchangeRate::where('active', true)->get();
+        $rates = $exchangeRateService->getcurrentRate();
         $transactions = Transaction::where('created_at', 'like', $today.'%')
             ->orderBy('id', 'desc')->get();
         $currencies = Currency::all();

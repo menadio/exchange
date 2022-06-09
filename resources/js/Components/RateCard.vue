@@ -25,6 +25,7 @@ defineProps(["rate"]);
             <p>buy</p>
           </div>
         </div>
+        
         <div class="w-0 flex-1 flex flex-col divide-y divide-gray-200">
           <div class="mb-4 text-4xl font-thin">
             <h4>{{ rate.sell }}</h4>
