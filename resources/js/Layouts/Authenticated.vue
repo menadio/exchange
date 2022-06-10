@@ -328,7 +328,7 @@ function logout() {
         </div>
       </div>
 
-      <main class="px-8 py-8 bg-off-white">
+      <main class="px-8 py-8 bg-off-white h-screen">
         <!-- <AppFlashmessages /> -->
         <slot />
       </main>
