@@ -68,7 +68,9 @@ class StoreCurrencyTransaction
             'amount' => $transaction->amount,
             'rate' => $transaction->rate,
             'value' => $transaction->value,
-            'channel_id' => $transaction->channel_id
+            'channel_id' => $transaction->channel_id,
+            'exchange_channel_id' => $transaction->exchange_channel_id,
+            'note' => $transaction->note,
         ]);
     }
 
@@ -86,7 +88,9 @@ class StoreCurrencyTransaction
             'amount' => $transaction->amount,
             'rate' => $transaction->rate,
             'value' => $transaction->value,
-            'channel_id' => $transaction->channel_id
+            'channel_id' => $transaction->channel_id,
+            'exchange_channel_id' => $transaction->exchange_channel_id,
+            'note' => $transaction->note,
         ]);
     }
 
@@ -104,7 +108,9 @@ class StoreCurrencyTransaction
             'amount' => $transaction->amount,
             'rate' => $transaction->rate,
             'value' => $transaction->value,
-            'channel_id' => $transaction->channel_id
+            'channel_id' => $transaction->channel_id,
+            'exchange_channel_id' => $transaction->exchange_channel_id,
+            'note' => $transaction->note,
         ]);
     }
 
@@ -122,7 +128,9 @@ class StoreCurrencyTransaction
             'amount' => $transaction->amount,
             'rate' => $transaction->rate,
             'value' => $transaction->value,
-            'channel_id' => $transaction->channel_id
+            'channel_id' => $transaction->channel_id,
+            'exchange_channel_id' => $transaction->exchange_channel_id,
+            'note' => $transaction->note,
         ]);
     }
 }

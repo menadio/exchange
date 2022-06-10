@@ -18,10 +18,13 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('currency_id')->constrained();
             $table->foreignId('trade_type_id')->constrained();
-            $table->float('amount', 8, 2);
+            $table->float('amount', 15, 2);
             $table->unsignedBigInteger('rate');
-            $table->float('value', 8, 2)->nullable();
+            $table->float('value', 15, 2)->nullable();
             $table->foreignId('channel_id')->constrained();
+            $table->foreignId('exchange_channel_id')
+                ->constrained('channels');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

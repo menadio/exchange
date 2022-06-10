@@ -22,6 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('rate');
             $table->float('value', 8, 2)->nullable();
             $table->foreignId('channel_id')->constrained();
+            $table->foreignId('exchange_channel_id')
+                ->constrained('channels');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

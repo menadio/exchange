@@ -12,7 +12,12 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { TrashIcon } from "@heroicons/vue/outline";
-import { ExclamationIcon, XCircleIcon, XIcon, CheckCircleIcon } from "@heroicons/vue/outline";
+import {
+  ExclamationIcon,
+  XCircleIcon,
+  XIcon,
+  CheckCircleIcon,
+} from "@heroicons/vue/outline";
 import AppLabel from "@/Components/Label.vue";
 import AppInput from "@/Components/Input.vue";
 import AppButton from "@/Components/Button.vue";
@@ -31,10 +36,11 @@ const form = reactive({
   amount: null,
   channel: null,
   exchangeChannel: null,
-  specialRate: null
+  note: null,
+  specialRate: null,
 });
 const open = ref(false);
-const show = ref(true)
+const show = ref(true);
 
 function trade() {
   open.value = true;
@@ -397,7 +403,6 @@ function submit() {
         </section>
 
         <!-- trade summary -->
-        
       </div>
     </div>
 
@@ -570,7 +575,7 @@ function submit() {
                     </select>
                   </div>
 
-                  <hr>
+                  <hr />
 
                   <DialogTitle
                     as="h3"
@@ -612,9 +617,25 @@ function submit() {
 
                   <div class="mt-4 relative">
                     <AppLabel value="Note" />
-                    <select
-                      id="type"
+                    <textarea
                       v-model="form.note"
+                      id="note"
+                      name="note"
+                      rows="3"
+                      class="
+                        max-w-lg
+                        shadow-sm
+                        block
+                        w-full
+                        focus:ring-indigo-500 focus:border-indigo-500
+                        sm:text-sm
+                        border border-gray-300
+                        rounded-md
+                      "
+                    />
+                    <!-- <select
+                      id="type"
+                      
                       class="
                         mt-1
                         block
@@ -638,7 +659,7 @@ function submit() {
                       >
                         {{ channel.name }}
                       </option>
-                    </select>
+                    </select> -->
                   </div>
 
                   <div class="mt-4">
@@ -648,7 +669,6 @@ function submit() {
                         v-model="form.specialRate"
                         type="number"
                         min="1"
-                        required
                         class="w-full"
                       />
                     </div>

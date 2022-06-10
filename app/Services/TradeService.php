@@ -27,22 +27,29 @@ class Tradeservice
      * @param int $channel
      * @return void
      */
-    public function recordTrade(User $user, int $currency, int $type, int $amount, int $channel): Transaction
+    // public function recordTrade(User $user, int $currency, int $type, int $amount, int $channel): Transaction
+    public function recordTrade($details): Transaction
     {
-        $rate = $this->exchangeRateService->getRate($currency, $type);
+        $user = auth()->user();
 
-        $tradeType = $this->tradeTypeService->getType($type);
+        $rate = is_null($details->specialRate) ? 
+            $this->exchangeRateService->getRate($details->currency, $details->type) :
+            $details->specialRate;
+
+        $tradeType = $this->tradeTypeService->getType($details->type);
         
-        $value = $this->calculateNairaValue($tradeType, $amount, $rate);
+        $value = $this->calculateNairaValue($tradeType, $details->amount, $rate);
 
         $transaction = Transaction::create([
             'user_id' => $user->id,
-            'currency_id' => $currency,
-            'trade_type_id' => $type,
-            'amount' => $amount,
+            'currency_id' => $details->currency,
+            'trade_type_id' => $details->type,
+            'amount' => $details->amount,
             'rate' => $rate,
             'value' => $value,
-            'channel_id' => $channel
+            'channel_id' => $details->channel,
+            'exchange_channel_id' => $details->exchangeChannel,
+            'note' => $details->note,
         ]);
 
         TradeRecorded::dispatch($transaction);
@@ -53,7 +60,7 @@ class Tradeservice
     public function calculateNairaValue(string $type, int $amount, $rate)
     {
         if ($type === 'buy') {
-            return $amount / $rate;
+            return $amount * $rate;
         }
 
         if ($type === 'sell') {

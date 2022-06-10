@@ -159,6 +159,8 @@ function logout() {
     <div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex flex-col flex-grow pt-5 bg-abu-black overflow-y-auto">
+        
+        <!-- logo -->
         <div class="flex items-center flex-shrink-0 px-4">
           <img
             class="h-8 w-auto"
@@ -166,6 +168,8 @@ function logout() {
             alt="Workflow"
           />
         </div>
+        
+        <!-- nav menu -->
         <div class="mt-5 flex-1 flex flex-col">
           <nav class="flex-1 px-2 pb-4 space-y-1">
             <ul>
@@ -189,15 +193,15 @@ function logout() {
                 </BreezeNavLink>
               </li>
 
-              <!-- <li class="mb-2">
+              <li class="mb-2">
                 <BreezeNavLink
-                  :href="route('reports')"
+                  :href="route('reports.index')"
                   class="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                   aria-hidden="true"
                 >
                   <DocumentTextIcon class="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300" /> Reports
                 </BreezeNavLink>
-              </li> -->
+              </li>
 
               <li class="mb-2">
                 <BreezeNavLink
@@ -233,6 +237,8 @@ function logout() {
         </div>
       </div>
     </div>
+
+    <!-- top menu bar -->
     <div class="md:pl-64 flex flex-col flex-1">
       <div class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
         <button
@@ -252,6 +258,7 @@ function logout() {
           <span class="sr-only">Open sidebar</span>
           <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
         </button>
+
         <div class="flex-1 px-4 flex justify-between">
           <div class="flex-1 flex">
             <!-- <form class="w-full flex md:ml-0" action="#" method="GET">
@@ -296,6 +303,7 @@ function logout() {
               </div>
             </form> -->
           </div>
+
           <div class="ml-4 flex items-center md:ml-6">
             <p class="mr-8">{{ $page.props.auth.user.name }}</p>
             <button

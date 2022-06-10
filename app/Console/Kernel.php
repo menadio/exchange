@@ -3,6 +3,9 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Schedules\GenerateDailyReport;
+use App\Console\Schedules\GenerateMonthlyReportSummary;
+use App\Services\ReportService;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -16,6 +19,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        // generate daily trade report
+        $schedule->call(new GenerateDailyReport)
+            ->days(range(1,6))
+            ->at('02:00');
+
+        // generate monthly trade summary report
+        $schedule->call(new GenerateMonthlyReportSummary)
+            ->lastDayOfMonth()
+            ->at('19:00');
     }
 
     /**

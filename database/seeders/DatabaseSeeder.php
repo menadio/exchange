@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ChannelSeeder::class,
             TradeTypeSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            CurrencySeeder::class
         ]);
     }
 }

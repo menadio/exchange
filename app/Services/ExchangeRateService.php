@@ -52,4 +52,16 @@ class ExchangeRateService
             'user_id' => auth()->user()->id
         ]);
     }
+
+    /** 
+     * Get current exchange rate
+     */
+    public function getcurrentRate()
+    {
+        return ExchangeRate::select('exchange_rates.*')
+            ->join('currencies', 'currencies.id', '=', 'exchange_rates.currency_id')
+            ->orderBy('currencies.id', 'asc')
+            ->where('exchange_rates.active', true)
+            ->get();
+    }
 }
