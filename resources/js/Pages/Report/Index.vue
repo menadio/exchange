@@ -1,8 +1,30 @@
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
 import AppLayout from "@/Layouts/Authenticated.vue";
+import { DocumentDownloadIcon } from "@heroicons/vue/outline";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { reactive, ref } from "vue";
+import AppButton from "@/Components/Button.vue";
+import AppLabel from "@/Components/Label.vue";
+import AppInput from "@/Components/Input.vue";
 
 const props = defineProps(["reports"]);
+const form = reactive({
+  startDate: null,
+  endDate: null,
+});
+
+let open = ref(false);
+
+function openDownloadModal() {
+  open.value = true;
+}
 </script>
 
 <template>
@@ -11,38 +33,12 @@ const props = defineProps(["reports"]);
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-          <h1 class="text-xl font-semibold text-gray-900">All Transactions</h1>
-          <p class="mt-2 text-sm text-gray-700">
-            List of all trade transactions record.
-          </p>
+          <h1 class="text-xl font-semibold text-gray-900">Reports</h1>
         </div>
 
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            @click="openDownloadModal"
-            type="button"
-            class="
-              inline-flex
-              items-center
-              justify-center
-              rounded-md
-              border border-transparent
-              bg-indigo-600
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-white
-              shadow-sm
-              hover:bg-indigo-700
-              focus:outline-none
-              focus:ring-2
-              focus:ring-indigo-500
-              focus:ring-offset-2
-              sm:w-auto
-            "
-          >
-            Download
+          <button>
+            <DocumentDownloadIcon @click="openDownloadModal" class="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300 hover:text-indigo-700" />
           </button>
         </div>
       </div>
@@ -75,7 +71,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                Period
+                Date
               </th>
               <th
                 scope="col"
@@ -89,7 +85,7 @@ const props = defineProps(["reports"]);
                   sm:table-cell
                 "
               >
-                USD Purchased
+                USD Pur
               </th>
               <th
                 scope="col"
@@ -117,7 +113,7 @@ const props = defineProps(["reports"]);
                   sm:table-cell
                 "
               >
-                GBP Purchased
+                GBP Pur
               </th>
               <th
                 scope="col"
@@ -145,7 +141,7 @@ const props = defineProps(["reports"]);
                   sm:table-cell
                 "
               >
-                EUR Purchased
+                EUR Pur
               </th>
               <th
                 scope="col"
@@ -173,7 +169,7 @@ const props = defineProps(["reports"]);
                   sm:table-cell
                 "
               >
-                AED Purchased
+                AED Pur
               </th>
               <th
                 scope="col"
@@ -201,7 +197,7 @@ const props = defineProps(["reports"]);
                   sm:table-cell
                 "
               >
-                NGN Purchase
+                NGN Pur
               </th>
               <th
                 scope="col"
@@ -234,7 +230,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.period }}
+                {{ report.date }}
               </td>
               <td
                 class="
@@ -248,7 +244,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_usd_purchased }}
+                {{ report.usd_purchased }}
               </td>
               <td
                 class="
@@ -262,7 +258,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_usd_sold }}
+                {{ report.usd_sold }}
               </td>
               <td
                 class="
@@ -276,7 +272,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_gbp_purchased }}
+                {{ report.gbp_purchased }}
               </td>
               <td
                 class="
@@ -290,7 +286,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_gbp_sold }}
+                {{ report.gbp_sold }}
               </td>
               <td
                 class="
@@ -304,7 +300,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_eur_purchased }}
+                {{ report.eur_purchased }}
               </td>
               <td
                 class="
@@ -318,7 +314,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_eur_sold }}
+                {{ report.eur_sold }}
               </td>
               <td
                 class="
@@ -332,7 +328,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_aed_purchased }}
+                {{ report.aed_purchased }}
               </td>
               <td
                 class="
@@ -346,7 +342,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_aed_sold }}
+                {{ report.aed_sold }}
               </td>
               <td
                 class="
@@ -360,7 +356,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_naira_purchase_value }}
+                {{ report.naira_purchase_value }}
               </td>
               <td
                 class="
@@ -374,7 +370,7 @@ const props = defineProps(["reports"]);
                   sm:pl-6
                 "
               >
-                {{ report.total_naira_sold_value }}
+                {{ report.naira_sold_value }}
               </td>
               <!-- <td
                 class="
@@ -470,5 +466,103 @@ const props = defineProps(["reports"]);
         </div>
       </nav>
     </div>
+
+    <!-- download modal -->
+    <TransitionRoot as="template" :show="open">
+      <Dialog as="div" class="relative z-10" @close="open = false">
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          />
+        </TransitionChild>
+
+        <div class="fixed z-10 inset-0 overflow-y-auto">
+          <div
+            class="
+              flex
+              items-end
+              sm:items-center
+              justify-center
+              min-h-full
+              p-4
+              text-center
+              sm:p-0
+            "
+          >
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enter-to="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 translate-y-0 sm:scale-100"
+              leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <DialogPanel
+                class="
+                  relative
+                  bg-white
+                  rounded-lg
+                  px-4
+                  pt-5
+                  pb-4
+                  text-left
+                  overflow-hidden
+                  shadow-xl
+                  transform
+                  transition-all
+                  sm:my-8 sm:max-w-lg sm:w-full sm:p-6
+                "
+              >
+                <DialogTitle
+                  as="h3"
+                  class="text-lg leading-6 font-medium text-gray-900"
+                >
+                  Download Report
+                </DialogTitle>
+
+                <form>
+                  <div class="mt-4">
+                    <AppLabel value="Start Date" />
+                    <div class="mt-1">
+                      <AppInput
+                        v-model="form.startDate"
+                        type="date"
+                        required
+                        class="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mt-4">
+                    <AppLabel value="End Date" />
+                    <div class="mt-1">
+                      <AppInput
+                        v-model="form.endDate"
+                        type="date"
+                        required
+                        class="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div v-if="form.startDate !== null && form.endDate !== null" class="mt-4">
+                    <a :href="route('reports.summary', form)">Download</a>
+                  </div>
+                </form>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </AppLayout>
 </template>

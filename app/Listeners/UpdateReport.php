@@ -2,22 +2,25 @@
 
 namespace App\Listeners;
 
+use App\Models\DailyReport;
 use App\Models\Report;
+use App\Services\CurrencyService;
 use Carbon\Carbon;
-use App\Services\Reportservice;
+use App\Services\ReportService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdateReport
+class UpdateReport implements ShouldQueue
 {
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(Reportservice $reportservice)
+    public function __construct(ReportService $reportService, CurrencyService $currencyService)
     {
-        $this->reportService = $reportservice;
+        $this->reportService = $reportService;
+        $this->currencyService = $currencyService;
     }
 
     /**
@@ -28,96 +31,122 @@ class UpdateReport
      */
     public function handle($event)
     {
-        $period = Carbon::parse($event->transaction->created_at)
-            ->format('Y-m');
-        $currencyId = $event->transaction->currency_id;
+        $date = Carbon::parse($event->transaction->created_at)
+            ->toDateString();
+
+        $currency = $this->currencyService->getCurrencyCode($event->transaction->currency_id);
+
         $tradeTypeId = $event->transaction->trade_type_id;
 
-        if ( $currencyId === 1 && $tradeTypeId === 1) {
-            $totalPurchasedUsd = $this->reportService->getUsdPurchased($period);
-            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($period);
+        switch ($$currency) {
+            case 'usd':
+                $this->usdTransaction($tradeTypeId, $date);
+                break;
             
-            Report::where('period', $period)
-                ->update([
-                    'total_usd_purchased' => $totalPurchasedUsd,
-                    'total_naira_purchase_value' => $totalNairaPurchasedValue
-                ]);
+            case 'gbp':
+                $this->gbpTransaction($tradeTypeId, $date);
+                break;
+            
+            case 'eur':
+                $this->eurTransaction($tradeTypeId, $date);
+                break;
+            
+            default:
+                $this->aedTransaction($tradeTypeId, $date);
+                break;
         }
 
-        if ( $currencyId === 1 && $tradeTypeId === 2) {
-            $totalUsdSold = $this->reportService->getUsdSold($period);
-            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($period);
+        
+    }
+
+    public function usdTransaction($tradeTypeId, $date): void
+    {
+        if ( $tradeTypeId === 1 ) {
+            $totalPurchasedUsd = $this->reportService->getUsdPurchased($date);
+            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($date);
             
-            Report::where('period', $period)
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
                 ->update([
-                    'total_usd_sold' => $totalUsdSold,
-                    'total_naira_sold_value' => $totalNairaSoldValue
+                    'usd_purchased' => $totalPurchasedUsd,
+                    'naira_purchase_value' => $totalNairaPurchasedValue
+                ]);
+        } else {
+            $totalUsdSold = $this->reportService->getUsdSold($date);
+            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($date);
+            
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
+                ->update([
+                    'usd_sold' => $totalUsdSold,
+                    'naira_sold_value' => $totalNairaSoldValue
                 ]);
         }
+    }
 
-        if ( $currencyId === 2 && $tradeTypeId === 1) {
-            $totalPurchasedGbp = $this->reportService->getGbpPurchased($period);
-            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($period);
+    public function gbpTransaction($tradeTypeId, $date): void
+    {
+        if ($tradeTypeId === 1) {
+            $totalPurchasedGbp = $this->reportService->getGbpPurchased($date);
+            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($date);
             
-            Report::where('period', $period)
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
                 ->update([
-                    'total_gbp_purchased' => $totalPurchasedGbp,
-                    'total_naira_purchase_value' => $totalNairaPurchasedValue
+                    'gbp_purchased' => $totalPurchasedGbp,
+                    'naira_purchase_value' => $totalNairaPurchasedValue
+                ]);
+        } else {
+            $totalGbpSold = $this->reportService->getGbpSold($date);
+            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($date);
+            
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
+                ->update([
+                    'gbp_sold' => $totalGbpSold,
+                    'naira_sold_value' => $totalNairaSoldValue
                 ]);
         }
+    }
 
-        if ( $currencyId === 2 && $tradeTypeId === 2) {
-            $totalGbpSold = $this->reportService->getGbpSold($period);
-            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($period);
+    public function eurTransaction($tradeTypeId, $date): void
+    {
+        if ($tradeTypeId ===  1) {
+            $totalPurchasedEur = $this->reportService->getEurPurchased($date);
+            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($date);
             
-            Report::where('period', $period)
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
                 ->update([
-                    'total_gbp_sold' => $totalGbpSold,
-                    'total_naira_sold_value' => $totalNairaSoldValue
+                    'eur_purchased' => $totalPurchasedEur,
+                    'naira_purchase_value' => $totalNairaPurchasedValue
+                ]);
+        } else {
+            $totalEurSold = $this->reportService->getEurSold($date);
+            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($date);
+            
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
+                ->update([
+                    'eur_sold' => $totalEurSold,
+                    'naira_sold_value' => $totalNairaSoldValue
                 ]);
         }
+    }
 
-        if ( $currencyId === 3 && $tradeTypeId === 1) {
-            $totalPurchasedEur = $this->reportService->getEurPurchased($period);
-            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($period);
+    public function aedTransaction($tradeTypeId, $date): void
+    {
+        if ( $tradeTypeId === 1 ) {
+            $totalPurchasedAed = $this->reportService->getAedPurchased($date);
+            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($date);
             
-            Report::where('period', $period)
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
                 ->update([
-                    'total_eur_purchased' => $totalPurchasedEur,
-                    'total_naira_purchase_value' => $totalNairaPurchasedValue
+                    'aed_purchased' => $totalPurchasedAed,
+                    'naira_purchase_value' => $totalNairaPurchasedValue
                 ]);
-        }
-
-        if ( $currencyId === 3 && $tradeTypeId === 2) {
-            $totalEurSold = $this->reportService->getEurSold($period);
-            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($period);
+        } else {
+            $totalAedSold = $this->reportService->getAedSold($date);
+            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($date);
             
-            Report::where('period', $period)
+            DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
                 ->update([
-                    'total_eur_sold' => $totalEurSold,
-                    'total_naira_sold_value' => $totalNairaSoldValue
-                ]);
-        }
-
-        if ( $currencyId === 4 && $tradeTypeId === 1) {
-            $totalPurchasedAed = $this->reportService->getAedPurchased($period);
-            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($period);
-            
-            Report::where('period', $period)
-                ->update([
-                    'total_aed_purchased' => $totalPurchasedAed,
-                    'total_naira_purchase_value' => $totalNairaPurchasedValue
-                ]);
-        }
-
-        if ( $currencyId === 4 && $tradeTypeId === 2) {
-            $totalAedSold = $this->reportService->getAedSold($period);
-            $totalNairaSoldValue = $this->reportService->getNairaSoldValue($period);
-            
-            Report::where('period', $period)
-                ->update([
-                    'total_aed_sold' => $totalAedSold,
-                    'total_naira_sold_value' => $totalNairaSoldValue
+                    'aed_sold' => $totalAedSold,
+                    'naira_sold_value' => $totalNairaSoldValue
                 ]);
         }
     }

@@ -1,7 +1,7 @@
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
 import AppLayout from "@/Layouts/Authenticated.vue";
-import { EyeIcon } from "@heroicons/vue/outline";
+import { DocumentDownloadIcon, EyeIcon } from "@heroicons/vue/outline";
 import { Link } from "@inertiajs/inertia-vue3";
 import {
   Dialog,
@@ -41,31 +41,8 @@ function openDownloadModal() {
         </div>
 
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            @click="openDownloadModal"
-            type="button"
-            class="
-              inline-flex
-              items-center
-              justify-center
-              rounded-md
-              border border-transparent
-              bg-indigo-600
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-white
-              shadow-sm
-              hover:bg-indigo-700
-              focus:outline-none
-              focus:ring-2
-              focus:ring-indigo-500
-              focus:ring-offset-2
-              sm:w-auto
-            "
-          >
-            Download
+          <button>
+            <DocumentDownloadIcon @click="openDownloadModal" class="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300 hover:text-indigo-700" />
           </button>
         </div>
       </div>
@@ -449,7 +426,7 @@ function openDownloadModal() {
                     </div>
                   </div>
 
-                  <div class="mt-4">
+                  <div v-if="form.startDate !== null && form.endDate !== null" class="mt-4">
                     <a :href="route('transactions.download', form)">Download</a>
                   </div>
                 </form>

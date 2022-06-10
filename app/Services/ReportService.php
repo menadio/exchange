@@ -2,18 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\Report;
+use App\Models\DailyReport;
 use App\Models\Transaction;
 use Carbon\Carbon;
 
-class Reportservice
+class ReportService
 {
     /**
      * gets collection of reports
      */
-    public function getReports()
+    public function getReports($period)
     {
-        return Report::orderBy('period', 'desc')
+        return DailyReport::where('created_at', 'like', $period.'%')
+            ->orderBy('date', 'desc')
             ->paginate(20);
     }
 

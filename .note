@@ -4,3 +4,12 @@
 - export pdf
 - send email at the end of the month
 - page to display reports
+
+==================================================================
+Date | Total USD Purchased | Total USD Sold | Total GBP Purchased | Total GBP Sold | 
+
+1,000,000,000
+
+
+1. create schedule to create the daily record at the start of each new day
+2. listen for transaction events and update accordingly

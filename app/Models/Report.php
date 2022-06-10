@@ -15,70 +15,70 @@ class Report extends Model
     public function totalUsdPurchased(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalUsdSold(): Attribute
     {
         return  Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalGbpPurchased(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalGbpSold(): Attribute
     {
         return  Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalEurPurchased(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalEurSold(): Attribute
     {
         return  Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalAedPurchased(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalAedSold(): Attribute
     {
         return  Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalNairaPurchaseValue(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 
     public function totalNairaSoldValue(): Attribute
     {
         return  Attribute::make(
-            get: fn ($value) => number_format($value, 2)
+            get: fn ($value) => number_format($value)
         );
     }
 }

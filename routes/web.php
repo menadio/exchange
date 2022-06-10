@@ -10,23 +10,11 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ExchangeRateController;
 use App\Http\Controllers\ReportController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+
 
 Route::get('/', function () {
     return Inertia::render('Auth/Login', [
         'canLogin' => Route::has('login'),
-        // 'canRegister' => Route::has('register'),
-        // 'laravelVersion' => Application::VERSION,
-        // 'phpVersion' => PHP_VERSION,
     ]);
 });
 
@@ -39,7 +27,11 @@ Route::get('users/download', [UserController::class, 'export'])
 Route::get('transactions/download', [TransactionController::class, 'download'])
     ->name('transactions.download');
 
-Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('reports', [ReportController::class, 'index'])
+    ->name('reports.index');
+
+Route::get('reports/summary/download', [ReportController::class, 'summary'])
+    ->name('reports.summary');
     
 Route::resource('users', UserController::class)
     ->middleware(['auth', 'verified']);
