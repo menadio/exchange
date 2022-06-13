@@ -34,11 +34,12 @@ class UpdateReport implements ShouldQueue
         $date = Carbon::parse($event->transaction->created_at)
             ->toDateString();
 
-        $currency = $this->currencyService->getCurrencyCode($event->transaction->currency_id);
+        $currency = $this->currencyService
+            ->getCurrencyCode($event->transaction->currency_id);
 
         $tradeTypeId = $event->transaction->trade_type_id;
 
-        switch ($$currency) {
+        switch (strtolower($currency)) {
             case 'usd':
                 $this->usdTransaction($tradeTypeId, $date);
                 break;

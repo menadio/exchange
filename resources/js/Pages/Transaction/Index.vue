@@ -163,6 +163,21 @@ function openDownloadModal() {
                   font-semibold
                   text-gray-900
                   lg:table-cell
+                  w-1/6
+                "
+              >
+                Naira
+              </th>
+              <th
+                scope="col"
+                class="
+                  hidden
+                  px-3
+                  py-3.5
+                  text-left text-sm
+                  font-semibold
+                  text-gray-900
+                  lg:table-cell
                   w-1/4
                 "
               ></th>
@@ -243,6 +258,18 @@ function openDownloadModal() {
                 "
               >
                 {{ transaction.channel.name }}
+              </td>
+              <td
+                class="
+                  hidden
+                  whitespace-nowrap
+                  px-3
+                  py-4
+                  text-sm text-gray-500
+                  lg:table-cell
+                "
+              >
+                {{ transaction.value }}
               </td>
               <td
                 class="
