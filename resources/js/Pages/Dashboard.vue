@@ -247,7 +247,7 @@ function submit() {
                     font-semibold
                     text-gray-900
                     sm:table-cell
-                    w-1/5
+                    w-1/6
                   "
                 >
                   Currency
@@ -262,7 +262,7 @@ function submit() {
                     font-semibold
                     text-gray-900
                     sm:table-cell
-                    w-1/5
+                    w-1/6
                   "
                 >
                   Type
@@ -277,7 +277,7 @@ function submit() {
                     font-semibold
                     text-gray-900
                     lg:table-cell
-                    w-1/5
+                    w-1/6
                   "
                 >
                   Amount
@@ -292,7 +292,7 @@ function submit() {
                     font-semibold
                     text-gray-900
                     lg:table-cell
-                    w-1/5
+                    w-1/6
                   "
                 >
                   Rate
@@ -307,10 +307,40 @@ function submit() {
                     font-semibold
                     text-gray-900
                     lg:table-cell
-                    w-1/5
+                    w-1/6
                   "
                 >
                   Channel
+                </th>
+                <th
+                  scope="col"
+                  class="
+                    hidden
+                    px-3
+                    py-3.5
+                    text-left text-sm
+                    font-semibold
+                    text-gray-900
+                    lg:table-cell
+                    w-1/6
+                  "
+                >
+                  Naira
+                </th>
+                <th
+                  scope="col"
+                  class="
+                    hidden
+                    px-3
+                    py-3.5
+                    text-left text-sm
+                    font-semibold
+                    text-gray-900
+                    lg:table-cell
+                    w-1/6
+                  "
+                >
+                  Traded At
                 </th>
                 <!-- <th
                   scope="col"
@@ -328,6 +358,7 @@ function submit() {
                 </th> -->
               </tr>
             </thead>
+
             <tbody class="divide-y divide-gray-200 bg-white">
               <tr v-for="transaction in transactions" :key="transaction.id">
                 <td
@@ -396,6 +427,30 @@ function submit() {
                   "
                 >
                   {{ transaction.channel.name }}
+                </td>
+                <td
+                  class="
+                    hidden
+                    whitespace-nowrap
+                    px-3
+                    py-4
+                    text-sm text-gray-500
+                    lg:table-cell
+                  "
+                >
+                  {{ transaction.value }}
+                </td>
+                <td
+                  class="
+                    hidden
+                    whitespace-nowrap
+                    px-3
+                    py-4
+                    text-sm text-gray-500
+                    lg:table-cell
+                  "
+                >
+                  {{ transaction.created_at }}
                 </td>
               </tr>
             </tbody>

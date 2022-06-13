@@ -66,21 +66,6 @@ function openDownloadModal() {
               <th
                 scope="col"
                 class="
-                  py-3.5
-                  pl-4
-                  pr-3
-                  text-left text-sm
-                  font-semibold
-                  text-gray-900
-                  sm:pl-6
-                  w-1/6
-                "
-              >
-                Name
-              </th>
-              <th
-                scope="col"
-                class="
                   hidden
                   px-3
                   py-3.5
@@ -178,27 +163,29 @@ function openDownloadModal() {
                   font-semibold
                   text-gray-900
                   lg:table-cell
+                  w-1/6
+                "
+              >
+                Traded At
+              </th>
+              <th
+                scope="col"
+                class="
+                  hidden
+                  px-3
+                  py-3.5
+                  text-left text-sm
+                  font-semibold
+                  text-gray-900
+                  lg:table-cell
                   w-1/4
                 "
               ></th>
             </tr>
           </thead>
+
           <tbody class="divide-y divide-gray-200 bg-white">
             <tr v-for="transaction in transactions.data" :key="transaction.id">
-              <td
-                class="
-                  whitespace-nowrap
-                  py-4
-                  pl-4
-                  pr-3
-                  text-sm
-                  font-medium
-                  text-gray-900
-                  sm:pl-6
-                "
-              >
-                {{ transaction.user.name }}
-              </td>
               <td
                 class="
                   whitespace-nowrap
@@ -270,6 +257,18 @@ function openDownloadModal() {
                 "
               >
                 {{ transaction.value }}
+              </td>
+              <td
+                class="
+                  hidden
+                  whitespace-nowrap
+                  px-3
+                  py-4
+                  text-sm text-gray-500
+                  lg:table-cell
+                "
+              >
+                {{ transaction.created_at }}
               </td>
               <td
                 class="
