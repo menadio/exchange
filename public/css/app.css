@@ -796,6 +796,9 @@ select {
 .h-0 {
   height: 0px;
 }
+.h-screen {
+  height: 100vh;
+}
 .h-20 {
   height: 5rem;
 }
