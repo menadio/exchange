@@ -9,7 +9,7 @@ use App\Models\Report;
 use App\Models\DailyReport;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Services\Reportservice;
+use App\Services\ReportService;
 
 class ReportController extends Controller
 {
@@ -18,7 +18,7 @@ class ReportController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(Reportservice $reportService)
+    public function index(ReportService $reportService)
     {
         $period = Carbon::now()->format('Y-m');
 

@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/var/www/html
     ports:
-      - 8800:8000
+      - 8802:8000
 
   db:
     image: mysql:8.0
@@ -25,7 +25,7 @@ services:
   adminer:
     image: adminer
     ports:
-      - 8080:8080
+      - 8082:8080
 
 volumes:
   datadir:

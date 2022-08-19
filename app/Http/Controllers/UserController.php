@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -42,26 +43,30 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validation = Validator::make($request->all(), [
             'name' => ['required', 'string', 'unique:users,name'],
             'email' => ['required', 'unique:users,email'],
             'password' => ['required', 'min:8']
         ]);
 
+        if ($validation->fails()) {
+            request()->session()->flash('error', $validation->errors()->first());
+            return Redirect::route('users.index');
+        }
+
         $user = User::create([
             'name'  => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->passwprd)
+            'password' => Hash::make($request->password)
         ]);
 
         if ($user) {
             request()->session()->flash('success', 'New user added successfully.');
             return Redirect::route('users.index');
         } else {
-            $request()->session()->flash('error', 'Ops! Could not add user, please try again');
+            request()->session()->flash('error', 'Ops! Could not add user, please try again');
             return Redirect::route('users.index');
         }
-
     }
 
     /**

@@ -6,15 +6,15 @@ use App\Exports\TransactionsExport;
 use App\Models\Currency;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Services\Tradeservice;
+use App\Services\TradeService;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class TransactionController extends Controller
 {
     protected $tradeService;
-    
-    public function __construct(Tradeservice $tradeService)
+
+    public function __construct(TradeService $tradeService)
     {
         $this->tradeService = $tradeService;
     }
@@ -68,7 +68,6 @@ class TransactionController extends Controller
             request()->session()->flash('error', 'Ops! Failed to record trade transaction.');
             return Redirect::route('dashboard');
         }
-
     }
 
     /**

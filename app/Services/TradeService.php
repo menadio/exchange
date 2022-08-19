@@ -6,7 +6,7 @@ use App\Events\TradeRecorded;
 use App\Models\User;
 use App\Models\Transaction;
 
-class Tradeservice
+class TradeService
 {
     protected $exchangeRateService;
     protected $tradeTypeService;
@@ -27,17 +27,16 @@ class Tradeservice
      * @param int $channel
      * @return void
      */
-    // public function recordTrade(User $user, int $currency, int $type, int $amount, int $channel): Transaction
     public function recordTrade($details): Transaction
     {
         $user = auth()->user();
 
-        $rate = is_null($details->specialRate) ? 
+        $rate = is_null($details->specialRate) ?
             $this->exchangeRateService->getRate($details->currency, $details->type) :
             $details->specialRate;
 
         $tradeType = $this->tradeTypeService->getType($details->type);
-        
+
         $value = $this->calculateNairaValue($tradeType, $details->amount, $rate);
 
         $transaction = Transaction::create([

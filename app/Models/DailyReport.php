@@ -18,8 +18,15 @@ class DailyReport extends Model
             get: fn ($value) => number_format($value)
         );
     }
-    
+
     public function usdSold(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => number_format($value)
+        );
+    }
+
+    public function usdBal(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => number_format($value)
@@ -40,6 +47,13 @@ class DailyReport extends Model
         );
     }
 
+    public function gbpBal(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => number_format($value)
+        );
+    }
+
     public function eurPurchased(): Attribute
     {
         return Attribute::make(
@@ -48,6 +62,13 @@ class DailyReport extends Model
     }
 
     public function eurSold(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => number_format($value)
+        );
+    }
+
+    public function eurBal(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => number_format($value)
@@ -68,6 +89,13 @@ class DailyReport extends Model
         );
     }
 
+    public function aedBal(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => number_format($value)
+        );
+    }
+
     public function nairaPurchaseValue(): Attribute
     {
         return Attribute::make(
@@ -76,6 +104,13 @@ class DailyReport extends Model
     }
 
     public function nairaSoldValue(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => number_format($value)
+        );
+    }
+
+    public function nairaBal(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => number_format($value)

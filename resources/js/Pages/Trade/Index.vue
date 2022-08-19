@@ -15,25 +15,29 @@ import AppInput from "@/Components/Input.vue";
 import AppButton from "@/Components/Button.vue";
 import { CheckCircleIcon, XCircleIcon, XIcon } from "@heroicons/vue/solid";
 
-const props = defineProps(["rates", "currencies", "success", "message"]);
+const props = defineProps([
+    "tradeBalances",
+    "currencies",
+    "success",
+    "message",
+]);
 const form = reactive({
-    currency: null,
-    buy: null,
-    sell: null,
+    currency_id: null,
+    opening_balance: null,
+    closing_balance: null,
 });
 
 let open = ref(false);
 const show = ref(true);
 
-function addRate() {
+function setBalance() {
     open.value = true;
 }
 
 function submit() {
-    Inertia.post(route("rates.store"), form);
+    Inertia.post(route("trade-balances.store"), form);
     open.value = false;
     onFinishe: () => {
-        console.log("reset form");
         form.reset();
     };
 }
@@ -122,23 +126,25 @@ function submit() {
             </div>
         </div>
 
-        <!-- exchange rate history -->
+        <!-- trade balances -->
         <div class="mt-8 px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-xl font-semibold text-gray-900">History</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">
+                        Trade Balances
+                    </h1>
                     <p class="mt-2 text-sm text-gray-700">
-                        Exchange rate history.
+                        Opening and closing balances for all trade currencies.
                     </p>
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button
-                        @click="addRate"
+                        @click="setBalance"
                         type="button"
                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                     >
-                        New Rate
+                        Set Balance
                     </button>
                 </div>
             </div>
@@ -160,54 +166,58 @@ function submit() {
                                 scope="col"
                                 class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/5"
                             >
-                                Buy
+                                Opening Balance
                             </th>
                             <th
                                 scope="col"
                                 class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/5"
                             >
-                                Sell
+                                Closing Balance
                             </th>
                             <th
                                 scope="col"
-                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/5"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/5"
                             >
-                                Added On
+                                Created At
                             </th>
                             <th
                                 scope="col"
-                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/5"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/5"
                             >
                                 Updated At
                             </th>
                         </tr>
                     </thead>
+
                     <tbody class="divide-y divide-gray-200 bg-white">
-                        <tr v-for="rate in rates.data" :key="rate.id">
+                        <tr
+                            v-for="tradeBalance in tradeBalances.data"
+                            :key="tradeBalance.id"
+                        >
                             <td
                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 capitalize"
                             >
-                                {{ rate.currency.code }}
+                                {{ tradeBalance.currency.code }}
                             </td>
                             <td
                                 class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell uppercase"
                             >
-                                {{ rate.buy }}
+                                {{ tradeBalance.opening_balance }}
                             </td>
                             <td
                                 class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell uppercase"
                             >
-                                {{ rate.sell }}
+                                {{ tradeBalance.closing_balance }}
                             </td>
                             <td
                                 class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
                             >
-                                {{ rate.created_at }}
+                                {{ tradeBalance.created_at }}
                             </td>
                             <td
                                 class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
                             >
-                                {{ rate.updated_at }}
+                                {{ tradeBalance.updated_at }}
                             </td>
                         </tr>
                     </tbody>
@@ -215,20 +225,22 @@ function submit() {
             </div>
 
             <!-- pagination buttons -->
-            <nav
+            <!-- <nav
                 class="bg-white mt-4 px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 rounded-lg"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">
                     <p class="text-sm text-gray-700">
                         Showing
-                        <span class="font-medium">{{ rates.from }}</span>
+                        <span class="font-medium">{{ tradeBalance.from }}</span>
                         {{ " " }}
                         to
-                        <span class="font-medium">{{ rates.to }}</span>
+                        <span class="font-medium">{{ tradeBalance.to }}</span>
                         {{ " " }}
                         of
-                        <span class="font-medium">{{ rates.total }}</span>
+                        <span class="font-medium">{{
+                            tradeBalance.total
+                        }}</span>
                         {{ " " }}
                         results
                     </p>
@@ -247,7 +259,7 @@ function submit() {
                         Next
                     </a>
                 </div>
-            </nav>
+            </nav> -->
         </div>
 
         <!-- add user modal -->
@@ -287,7 +299,7 @@ function submit() {
                                     as="h3"
                                     class="text-lg leading-6 font-medium text-gray-900"
                                 >
-                                    New Exchange Rate
+                                    Record Currency Trading Balance
                                 </DialogTitle>
 
                                 <form @submit.prevent="submit">
@@ -295,7 +307,7 @@ function submit() {
                                         <AppLabel value="Currency" />
                                         <select
                                             id="currency"
-                                            v-model="form.currency"
+                                            v-model="form.currency_id"
                                             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                                         >
                                             <option
@@ -309,10 +321,10 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4">
-                                        <AppLabel value="Buy" />
+                                        <AppLabel value="Opening Balance" />
                                         <div class="mt-1">
                                             <AppInput
-                                                v-model="form.buy"
+                                                v-model="form.opening_balance"
                                                 type="number"
                                                 required
                                                 class="w-full"
@@ -321,10 +333,10 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4">
-                                        <AppLabel value="Sell" />
+                                        <AppLabel value="Closing Balance" />
                                         <div class="mt-1">
                                             <AppInput
-                                                v-model="form.sell"
+                                                v-model="form.closing_balance"
                                                 type="number"
                                                 required
                                                 class="w-full"

@@ -2,7 +2,7 @@
 import { Inertia } from "@inertiajs/inertia";
 import AppLayout from "@/Layouts/Authenticated.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import { reactive, ref } from "vue";
+import { ref, reactive } from "vue";
 import {
     Dialog,
     DialogPanel,
@@ -10,7 +10,6 @@ import {
     TransitionChild,
     TransitionRoot,
 } from "@headlessui/vue";
-import { TrashIcon } from "@heroicons/vue/outline";
 import {
     ExclamationIcon,
     XCircleIcon,
@@ -22,32 +21,23 @@ import AppLabel from "@/Components/Label.vue";
 import AppInput from "@/Components/Input.vue";
 import AppButton from "@/Components/Button.vue";
 
-const props = defineProps(["users"]);
+const props = defineProps(["user"]);
 const form = reactive({
-    name: null,
-    email: null,
+    // old_password: null,
     password: null,
+    password_confirmation: null,
 });
 const show = ref(true);
 const open = ref(false);
-const deactivate = ref(false);
 
-function addUser() {
+const showUpdateForm = () => {
     open.value = true;
-}
+};
 
-function confirmDeactivation() {
-    deactivate.value = true;
-}
-
-function submit() {
-    Inertia.post(route("users.store"), form);
+const updatePassword = () => {
+    Inertia.put(route("password.change"), form);
     open.value = false;
-}
-
-function downloadUsersList() {
-    Inertia.get(route("users.download"));
-}
+};
 </script>
 
 <template>
@@ -124,91 +114,86 @@ function downloadUsersList() {
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h1 class="text-xl font-semibold text-gray-900">
-                        User Management
+                        Manage Settings
                     </h1>
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button
-                        v-if="$page.props.auth.user.role === 'super admin'"
-                        @click="addUser"
+                        @click="showUpdateForm"
                         type="button"
                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                     >
-                        New User
+                        Update Password
                     </button>
                 </div>
             </div>
 
-            <div
-                class="mb-8 -mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg"
-            >
-                <table class="min-w-full divide-y divide-gray-300 table-fixed">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th
-                                scope="col"
-                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-1/4"
-                            >
+            <div class="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                        User Details
+                    </h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        Specific details of the user.
+                    </p>
+                </div>
+                <div class="border-t border-gray-200">
+                    <dl>
+                        <div
+                            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                        >
+                            <dt class="text-sm font-medium text-gray-500">
                                 Name
-                            </th>
-                            <th
-                                scope="col"
-                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/4"
-                            >
-                                Email
-                            </th>
-                            <th
-                                scope="col"
-                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/4"
-                            >
-                                Last Login
-                            </th>
-                            <th
-                                scope="col"
-                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/4"
-                            >
-                                Date
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                        <tr v-for="user in users" :key="user.id">
-                            <td
-                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                            </dt>
+                            <dd
+                                class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
                                 {{ user.name }}
-                            </td>
-                            <td
-                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                            </dd>
+                        </div>
+                        <div
+                            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                        >
+                            <dt class="text-sm font-medium text-gray-500">
+                                Email
+                            </dt>
+                            <dd
+                                class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
                                 {{ user.email }}
-                            </td>
-                            <td
-                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                            ></td>
-                            <td
-                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            </dd>
+                        </div>
+                        <div
+                            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                        >
+                            <dt class="text-sm font-medium text-gray-500">
+                                Role
+                            </dt>
+                            <dd
+                                class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                            >
+                                {{ user.role }}
+                            </dd>
+                        </div>
+                        <div
+                            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                        >
+                            <dt class="text-sm font-medium text-gray-500">
+                                Account Created On
+                            </dt>
+                            <dd
+                                class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
                                 {{ user.created_at }}
-                            </td>
-                            <td
-                                class="hidden whitespace-nowrap px-3 py-4 text-sm lg:table-cell"
-                            >
-                                <Link
-                                    :href="route('users.show', user.id)"
-                                    class="text-gray-300 hover:text-indigo-700"
-                                >
-                                    <EyeIcon class="h-6 w-6" />
-                                </Link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
         </div>
 
-        <!-- add user modal -->
+        <!-- password update modal -->
         <TransitionRoot as="template" :show="open">
             <Dialog as="div" class="relative z-10" @close="open = false">
                 <TransitionChild
@@ -245,39 +230,41 @@ function downloadUsersList() {
                                     as="h3"
                                     class="text-lg leading-6 font-medium text-gray-900"
                                 >
-                                    New User Form
+                                    Password Update
                                 </DialogTitle>
 
-                                <form @submit.prevent="submit">
-                                    <div class="mt-4">
-                                        <AppLabel value="Name" />
+                                <form @submit.prevent="updatePassword">
+                                    <!-- <div class="mt-4">
+                                        <AppLabel value="Old Password" />
                                         <div class="mt-1">
                                             <AppInput
-                                                v-model="form.name"
-                                                type="text"
+                                                v-model="form.old_password"
+                                                type="password"
                                                 required
                                                 class="w-full"
                                             />
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="mt-4">
-                                        <AppLabel value="Email" />
-                                        <div class="mt-1">
-                                            <AppInput
-                                                v-model="form.email"
-                                                type="email"
-                                                required
-                                                class="w-full"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-4">
-                                        <AppLabel value="Password" />
+                                        <AppLabel value="New Password" />
                                         <div class="mt-1">
                                             <AppInput
                                                 v-model="form.password"
+                                                type="password"
+                                                required
+                                                class="w-full"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <AppLabel value="Confirm Password" />
+                                        <div class="mt-1">
+                                            <AppInput
+                                                v-model="
+                                                    form.password_confirmation
+                                                "
                                                 type="password"
                                                 required
                                                 class="w-full"
