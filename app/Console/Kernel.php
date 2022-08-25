@@ -30,14 +30,14 @@ class Kernel extends ConsoleKernel
             ->at('07:00');
 
         // generate daily trade report
-        $schedule->call(new GenerateDailyReport)
-            ->days(range(1, 6))
-            ->at('07:30');
+//        $schedule->call(new GenerateDailyReport)
+//            ->days(range(1, 6))
+//            ->at('07:30');
 
         // close trading balance
-        $schedule->call(new CloseBalance)
-            ->days(range(1, 6))
-            ->at('20:00');
+//        $schedule->call(new CloseBalance)
+//            ->days(range(1, 6))
+//            ->at('20:00');
 
         // generate monthly trade summary report
         $schedule->call(new GenerateMonthlyReportSummary)

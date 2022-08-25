@@ -25,6 +25,10 @@ let open = ref(false);
 function openDownloadModal() {
     open.value = true;
 }
+
+const runEndOfDayReport = () => {
+    Inertia.get(route('trade.close'));
+}
 </script>
 
 <template>
@@ -36,12 +40,20 @@ function openDownloadModal() {
                     <h1 class="text-xl font-semibold text-gray-900">Reports</h1>
                 </div>
 
-                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <button>
-                        <DocumentDownloadIcon
-                            @click="openDownloadModal"
-                            class="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300 hover:text-indigo-700"
-                        />
+                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none grid grid-cols-2 gap-4">
+                    <button @click="openDownloadModal">
+<!--                        <DocumentDownloadIcon-->
+<!--                            @click="openDownloadModal"-->
+<!--                            class="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300 hover:text-indigo-700"-->
+<!--                        />-->
+                        <span class="text-indigo-600 underline">Download Report</span>
+                    </button>
+                    <button
+                        @click="runEndOfDayReport"
+                        type="button"
+                        class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                        Re-run End of Day
                     </button>
                 </div>
             </div>

@@ -72,5 +72,9 @@ Route::resource('transactions', TransactionController::class)
 Route::resource('trade-balances', TradeBalanceController::class)
     ->middleware(['auth']);
 
+Route::get('close-trade', \App\Http\Controllers\TradeReportController::class)
+    ->middleware(['auth'])->name('trade.close');
+
+Route::get('secure-logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
 require __DIR__ . '/auth.php';

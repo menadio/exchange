@@ -2,9 +2,9 @@
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import BalanceCard from "@/Components/BalanceCard.vue";
 import RateCard from "@/Components/RateCard.vue";
-import { Head } from "@inertiajs/inertia-vue3";
-import { CurrencyDollarIcon } from "@heroicons/vue/outline";
-import { reactive, ref } from "vue";
+import {Head, Link} from "@inertiajs/inertia-vue3";
+import {CurrencyDollarIcon} from "@heroicons/vue/outline";
+import {reactive, ref} from "vue";
 import {
     Dialog,
     DialogPanel,
@@ -12,7 +12,7 @@ import {
     TransitionChild,
     TransitionRoot,
 } from "@headlessui/vue";
-import { TrashIcon } from "@heroicons/vue/outline";
+import {TrashIcon} from "@heroicons/vue/outline";
 import {
     ExclamationIcon,
     XCircleIcon,
@@ -22,7 +22,7 @@ import {
 import AppLabel from "@/Components/Label.vue";
 import AppInput from "@/Components/Input.vue";
 import AppButton from "@/Components/Button.vue";
-import { Inertia } from "@inertiajs/inertia";
+import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps([
     "rates",
@@ -51,6 +51,10 @@ function trade() {
 function submit() {
     Inertia.post(route("transactions.store"), form);
     open.value = false;
+}
+
+const runEndOfDayReport = () => {
+    Inertia.get(route('trade.close'));
 }
 </script>
 
@@ -83,7 +87,7 @@ function submit() {
                                 class="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
                             >
                                 <span class="sr-only">Dismiss</span>
-                                <XIcon class="h-5 w-5" aria-hidden="true" />
+                                <XIcon class="h-5 w-5" aria-hidden="true"/>
                             </button>
                         </div>
                     </div>
@@ -129,7 +133,7 @@ function submit() {
                                 class="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
                             >
                                 <span class="sr-only">Dismiss</span>
-                                <XIcon class="h-5 w-5" aria-hidden="true" />
+                                <XIcon class="h-5 w-5" aria-hidden="true"/>
                             </button>
                         </div>
                     </div>
@@ -148,8 +152,14 @@ function submit() {
             </div>
 
             <!-- exchange rates -->
-            <div class="mt-6 grid grid-cols-4 gap-6">
-                <RateCard v-for="rate in rates" :key="rate.id" :rate="rate" />
+            <div v-if="rates.length > 0" class="mt-6 grid grid-cols-4 gap-6">
+                <RateCard v-for="rate in rates" :key="rate.id" :rate="rate"/>
+            </div>
+
+            <div v-else class="px-6 py-8 bg-white text-center shadow rounded-lg">
+                You will not be able to start trading until exchange rates are set. Click
+                <Link :href="route('rates.index')" class="underline">here</Link>
+                to set rates.
             </div>
 
             <div class="mt-12 sm:flex sm:items-center">
@@ -161,12 +171,18 @@ function submit() {
             </div>
 
             <!-- trade opening balances -->
-            <div class="mt-6 grid grid-cols-5 gap-2">
+            <div v-if="balances.length > 0" class="mt-6 grid grid-cols-5 gap-2">
                 <BalanceCard
                     v-for="balance in balances"
                     :key="balance.id"
                     :balance="balance"
                 />
+            </div>
+
+            <div v-else class="px-6 py-8 bg-white text-center shadow rounded-lg">
+                You will not be able to start trading until trading balances are set. Click
+                <Link :href="route('trade-balances.index')" class="underline">here</Link>
+                to set trade balances.
             </div>
 
             <!-- daily trade transactions -->
@@ -177,7 +193,14 @@ function submit() {
                     </h1>
                 </div>
 
-                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                <div v-if="rates.length > 0 && balances.length > 0 " class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none grid grid-cols-2 gap-x-5">
+                    <button
+                        @click="runEndOfDayReport"
+                        type="button"
+                        class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                        Close Trade
+                    </button>
                     <button
                         @click="trade"
                         type="button"
@@ -197,136 +220,105 @@ function submit() {
                         class="min-w-full divide-y divide-gray-300 table-fixed"
                     >
                         <thead class="bg-gray-50">
-                            <tr>
-                                <!-- <th
-                  scope="col"
-                  class="
-                    py-3.5
-                    pl-4
-                    pr-3
-                    text-left text-sm
-                    font-semibold
-                    text-gray-900
-                    sm:pl-6
-                    w-1/4
-                  "
-                >
-                  Name
-                </th> -->
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/6"
-                                >
-                                    Currency
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/6"
-                                >
-                                    Type
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
-                                >
-                                    Amount
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
-                                >
-                                    Rate
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
-                                >
-                                    Channel
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
-                                >
-                                    Naira
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
-                                >
-                                    Traded At
-                                </th>
-                                <!-- <th
-                  scope="col"
-                  class="
-                    hidden
-                    px-3
-                    py-3.5
-                    text-left text-sm
-                    font-semibold
-                    text-gray-900
-                    lg:table-cell
-                  "
-                >
-                  Date
-                </th> -->
-                            </tr>
+                        <tr>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/6"
+                            >
+                                Currency
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell w-1/6"
+                            >
+                                Type
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
+                            >
+                                Amount
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
+                            >
+                                Rate
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
+                            >
+                                Channel
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
+                            >
+                                Naira
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell w-1/6"
+                            >
+                                Traded At
+                            </th>
+                        </tr>
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 bg-white">
-                            <tr
-                                v-for="transaction in transactions"
-                                :key="transaction.id"
+                        <tr
+                            v-for="transaction in transactions"
+                            :key="transaction.id"
+                        >
+                            <td
+                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                             >
-                                <td
-                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                >
-                                    {{ transaction.currency.code }}
-                                </td>
-                                <td
-                                    class="hidden whitespace-nowrap px-3 py-4 text-sm sm:table-cell"
-                                    :class="
+                                {{ transaction.currency.code }}
+                            </td>
+                            <td
+                                class="hidden whitespace-nowrap px-3 py-4 text-sm sm:table-cell"
+                                :class="
                                         transaction.trade_type.id == 1
                                             ? 'text-green-600'
                                             : 'text-red-500'
                                     "
-                                >
-                                    {{ transaction.trade_type.name }}
-                                </td>
-                                <td
-                                    class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                                >
-                                    {{
-                                        new Intl.NumberFormat().format(
-                                            transaction.amount
-                                        )
-                                    }}
-                                </td>
-                                <td
-                                    class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                                >
-                                    {{ transaction.rate }}
-                                </td>
-                                <td
-                                    class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                                >
-                                    {{ transaction.channel.name }}
-                                </td>
-                                <td
-                                    class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                                >
-                                    {{ transaction.value }}
-                                </td>
-                                <td
-                                    class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                                >
-                                    {{ transaction.created_at }}
-                                </td>
-                            </tr>
+                            >
+                                {{ transaction.trade_type.name }}
+                            </td>
+                            <td
+                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                            >
+                                {{
+                                    new Intl.NumberFormat().format(
+                                        transaction.amount
+                                    )
+                                }}
+                            </td>
+                            <td
+                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                                {{ transaction.rate }}
+                            </td>
+                            <td
+                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                                {{ transaction.channel.name }}
+                            </td>
+                            <td
+                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                                {{ transaction.value }}
+                            </td>
+                            <td
+                                class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                                {{ transaction.created_at }}
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </section>
-
-                <!-- trade summary -->
             </div>
         </div>
 
@@ -372,7 +364,7 @@ function submit() {
 
                                 <form @submit.prevent="submit">
                                     <div class="mt-4 relative">
-                                        <AppLabel value="Currency" />
+                                        <AppLabel value="Currency"/>
                                         <select
                                             id="currency"
                                             v-model="form.currency"
@@ -389,7 +381,7 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4 relative">
-                                        <AppLabel value="Buy / Sell" />
+                                        <AppLabel value="Buy / Sell"/>
                                         <select
                                             id="type"
                                             v-model="form.type"
@@ -406,7 +398,7 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4">
-                                        <AppLabel value="Amount" />
+                                        <AppLabel value="Amount"/>
                                         <div class="mt-1">
                                             <AppInput
                                                 v-model="form.amount"
@@ -419,7 +411,7 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4 relative">
-                                        <AppLabel value="Channel" />
+                                        <AppLabel value="Channel"/>
                                         <select
                                             id="type"
                                             v-model="form.channel"
@@ -435,7 +427,7 @@ function submit() {
                                         </select>
                                     </div>
 
-                                    <hr />
+                                    <hr/>
 
                                     <DialogTitle
                                         as="h3"
@@ -445,7 +437,7 @@ function submit() {
                                     </DialogTitle>
 
                                     <div class="mt-4 relative">
-                                        <AppLabel value="Exchange Channel" />
+                                        <AppLabel value="Exchange Channel"/>
                                         <select
                                             id="type"
                                             v-model="form.exchangeChannel"
@@ -462,7 +454,7 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4 relative">
-                                        <AppLabel value="Note" />
+                                        <AppLabel value="Note"/>
                                         <textarea
                                             v-model="form.note"
                                             id="note"
@@ -472,7 +464,7 @@ function submit() {
                                         />
                                         <!-- <select
                       id="type"
-                      
+
                       class="
                         mt-1
                         block
@@ -500,7 +492,7 @@ function submit() {
                                     </div>
 
                                     <div class="mt-4">
-                                        <AppLabel value="Special Rate" />
+                                        <AppLabel value="Special Rate"/>
                                         <div class="mt-1">
                                             <AppInput
                                                 v-model="form.specialRate"

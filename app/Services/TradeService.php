@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\AedTraded;
+use App\Events\EurTraded;
+use App\Events\GbpTraded;
 use App\Events\TradeRecorded;
+use App\Events\UsdTraded;
 use App\Models\User;
 use App\Models\Transaction;
 
@@ -19,7 +23,7 @@ class TradeService
 
     /**
      * Records a trade transaction
-     * 
+     *
      * @param User $user
      * @param int $currency
      * @param int $type
@@ -51,7 +55,7 @@ class TradeService
             'note' => $details->note,
         ]);
 
-        TradeRecorded::dispatch($transaction);
+//        TradeRecorded::dispatch($transaction);
 
         return $transaction;
     }

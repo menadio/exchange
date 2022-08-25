@@ -26,6 +26,15 @@ class ReportService
             ->sum('amount');
     }
 
+    public function cashUsdPurchased($period)
+    {
+        return Transaction::where('created_at', 'like', $period.'%')
+            ->where('currency_id', 1)
+            ->where('trade_type_id', 1)
+            ->where('channel_id', 1)
+            ->sum('amount');
+    }
+
     public function getUsdSold($period)
     {
         return Transaction::where('created_at', 'like', $period.'%')
@@ -86,6 +95,14 @@ class ReportService
     {
         return Transaction::where('created_at', 'like', $period.'%')
             ->where('trade_type_id', 1)
+            ->sum('value');
+    }
+
+    public function cashNairaPurchased($period)
+    {
+        return Transaction::where('created_at', 'like', $period.'%')
+            ->where('trade_type_id', 1)
+            ->where('exchange_channel_id', 1)
             ->sum('value');
     }
 

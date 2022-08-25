@@ -16,7 +16,7 @@ class TradeBalanceService
             ->paginate(20);
     }
 
-    /** 
+    /**
      * get current trade balance of currencies
      */
     public function getCurrentCurrencyTradeBalance()
@@ -28,8 +28,8 @@ class TradeBalanceService
     }
 
     /**
-     * Create a& store trade balance record
-     * 
+     * Create & store trade balance record
+     *
      * @param \Illuminate\Http\Request $request
      * @return \App\Models\TradeBalance
      */

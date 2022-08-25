@@ -57,9 +57,21 @@ class UpdateReport implements ShouldQueue
 
         $tradeTypeId = $event->transaction->trade_type_id;
 
+        // customer transaction channel
+        $customerChannel = $event->transaction->channel_id;
+
+        // business transaction channel
+        $businessChannel = $event->transaction->exchange_channel_id;
+
         switch (strtolower($currency)) {
             case 'usd':
-                $this->usdTransaction($tradeTypeId, $date, $currencyId);
+                $this->usdTransaction(
+                    $tradeTypeId,
+                    $date,
+                    $currencyId,
+                    $customerChannel,
+                    $businessChannel
+                );
                 break;
 
             case 'gbp':
@@ -76,7 +88,7 @@ class UpdateReport implements ShouldQueue
         }
     }
 
-    public function usdTransaction($tradeTypeId, $date, $currency): void
+    public function usdTransaction($tradeTypeId, $date, $currency, $customerChannel, $businessChannel): void
     {
         $usdBal = $this->balanceService->getUsdTradingBalance($date);
         $ngnBal = $this->balanceService->getNgnTradingBalance($date);
@@ -90,19 +102,19 @@ class UpdateReport implements ShouldQueue
             $ngnBal;
 
         if ($tradeTypeId === 1) {
-
-            $totalPurchasedUsd = $this->reportService->getUsdPurchased($date);
-            $totalNairaPurchasedValue = $this->reportService->getNairaPurchaseValue($date);
+            // purchase transaction
+            $totalPurchasedUsd = $this->reportService->cashUsdPurchased($date);
+            $totalNairaPurchasedValue = $this->reportService->cashNairaPurchased($date);
 
             DailyReport::where('date', Carbon::parse($date)->format('d/m/Y'))
                 ->update([
                     'usd_purchased' => $totalPurchasedUsd,
-                    'usd_bal' => $totalPurchasedUsd + $currentUsdBal,
+                    'usd_bal' => ($customerChannel === 1) ? $totalPurchasedUsd + $currentUsdBal : $currentUsdBal,
                     'naira_purchase_value' => $totalNairaPurchasedValue,
-                    'naira_bal' => $currentNgnBal - $totalNairaPurchasedValue
+                    'naira_bal' => ($businessChannel === 1) ? $currentNgnBal - $totalNairaPurchasedValue : $currentNgnBal
                 ]);
         } else {
-
+            // selling transaction
             $totalUsdSold = $this->reportService->getUsdSold($date);
             $totalNairaSoldValue = $this->reportService->getNairaSoldValue($date);
 
