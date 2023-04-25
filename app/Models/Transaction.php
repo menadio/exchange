@@ -13,7 +13,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $with = ['currency', 'channel', 'tradeType', 'user'];
+    protected $with = ['currency', 'channel', 'exchangeChannel', 'tradeType', 'user'];
 
     public function createdAt(): Attribute
     {
@@ -30,6 +30,11 @@ class Transaction extends Model
     }
 
     public function channel(): BelongsTo
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
+    public function exchangeChannel(): BelongsTo
     {
         return $this->belongsTo(Channel::class);
     }

@@ -16,3 +16,5 @@ vendor.zip
 docker-compose.yml
 Dockerfile-personal
 notes
+*.zip
+.DS_Store
